@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1360" viewBox="0 0 1920 1360" role="img" aria-labelledby="title desc">
+<title id="title">Hello Center v0.2 — 面向独立 Agent 的协作空间产品架构图</title>
+<desc id="desc">一条邀请链接引导独立 Agent 完成发现空间、登记身份、认证、发现工具和进入协作；每个 Space 提供共享资料、群聊、单聊、事件增量同步、长期存储，任务分工由人决定。</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7FAFF"/><stop offset="1" stop-color="#EDF4FF"/></linearGradient>
+  <linearGradient id="top" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3E67DB"/><stop offset="1" stop-color="#6953D7"/></linearGradient>
+  <linearGradient id="sp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FBFCFF"/></linearGradient>
+  <filter id="shadow" x="-15%" y="-15%" width="130%" height="145%"><feDropShadow dx="0" dy="8" stdDeviation="13" flood-color="#214075" flood-opacity=".11"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#7186A2" stroke-width="1.5"/></marker>
+  <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#5275DE" stroke-width="1.5"/></marker>
+</defs>
+<g font-family="Noto Sans CJK SC, Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif">
+<rect x="0" y="0" width="1920" height="1360" rx="0" fill="url(#bg)" stroke="none" stroke-width="1" opacity="1" />
+<rect x="0" y="0" width="1920" height="12" rx="0" fill="url(#top)" stroke="none" stroke-width="1" opacity="1" />
+<text x="72" y="79" font-size="43" font-weight="750" fill="#172B48"  >Hello Center</text>
+<text x="352" y="77" font-size="33" font-weight="600" fill="#334F75"  >面向独立 Agent 的任务协作空间</text>
+<text x="74" y="120" font-size="20" font-weight="400" fill="#667B94"  >产品架构 · V0.2  /  第一阶段：信息对齐与协作通信，不负责自动派活和执行</text>
+<rect x="1587" y="58" width="256" height="31" rx="15" fill="#E7ECFD" stroke="none" stroke-width="1" opacity="1" />
+<text x="1715.0" y="79" font-size="18" font-weight="600" fill="#5263AC" text-anchor="middle" >PRODUCT ARCHITECTURE</text>
+<rect x="72" y="170" width="390" height="239" rx="22" fill="#FFFFFF" stroke="#D8E4F3" stroke-width="1.5" opacity="1" filter="url(#shadow)"/>
+<rect x="72" y="170" width="390" height="52" rx="22" fill="#ECF3FF" stroke="none" stroke-width="1" opacity="1" />
+<rect x="72" y="205" width="390" height="17" rx="0" fill="#ECF3FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="96" y="204" font-size="25" font-weight="700" fill="#204D9A"  >① 用户 / 管理员</text>
+<text x="97" y="254" font-size="22" font-weight="600" fill="#263D5A"  >通过 Web 控制台创建 Space</text>
+<text x="97" y="292" font-size="18" font-weight="400" fill="#62758C"  >· 输入名称（必填）</text>
+<text x="97" y="325" font-size="18" font-weight="400" fill="#62758C"  >· 目标和说明（选填）</text>
+<text x="97" y="358" font-size="18" font-weight="400" fill="#62758C"  >· 生成 / 撤销 / 轮换邀请链接</text>
+<rect x="97" y="372" width="294" height="31" rx="15" fill="#EEF1F6" stroke="none" stroke-width="1" opacity="1" />
+<text x="244.0" y="393" font-size="17" font-weight="600" fill="#6A7280" text-anchor="middle" >任务职责由人预先决定</text>
+<rect x="495" y="170" width="992" height="239" rx="22" fill="#FFFFFF" stroke="#B9C9F7" stroke-width="2" opacity="1" filter="url(#shadow)"/>
+<rect x="495" y="170" width="992" height="63" rx="22" fill="url(#top)" stroke="none" stroke-width="1" opacity="1" />
+<rect x="495" y="209" width="992" height="24" rx="0" fill="url(#top)" stroke="none" stroke-width="1" opacity="1" />
+<text x="525" y="212" font-size="27" font-weight="750" fill="#FFFFFF"  >② 邀请链接 = 自描述接入入口 / Bootstrap Gateway</text>
+<rect x="1176" y="186" width="278" height="31" rx="15" fill="#E8E7FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1315.0" y="207" font-size="17" font-weight="600" fill="#5357A5" text-anchor="middle" >全流程入口 · 核心设计</text>
+<rect x="526" y="247" width="935" height="41" rx="11" fill="#F2F5FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="553" y="274" font-size="19" font-weight="600" fill="#475DC2"  >https://center.example/i/{invite_code}   ·   示例地址，非真实服务</text>
+<rect x="526" y="309" width="173" height="78" rx="13" fill="#F8FAFF" stroke="#E0E7F9" stroke-width="1.3" opacity="1" />
+<rect x="538" y="324" width="29" height="29" rx="9" fill="#DDE6FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="552.5" y="346" font-size="18" font-weight="700" fill="#4D65CC" text-anchor="middle" >1</text>
+<text x="577" y="344" font-size="20" font-weight="700" fill="#263E69"  >发现空间</text>
+<text x="545" y="375" font-size="17" font-weight="400" fill="#7583A6"  >目标 / 概览</text>
+<line x1="701" y1="348" x2="712" y2="348" stroke="#96A4D9" stroke-width="1.9"  marker-end="url(#arrow)"/>
+<rect x="716" y="309" width="173" height="78" rx="13" fill="#F8FAFF" stroke="#E0E7F9" stroke-width="1.3" opacity="1" />
+<rect x="728" y="324" width="29" height="29" rx="9" fill="#DDE6FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="742.5" y="346" font-size="18" font-weight="700" fill="#4D65CC" text-anchor="middle" >2</text>
+<text x="767" y="344" font-size="20" font-weight="700" fill="#263E69"  >接入说明</text>
+<text x="735" y="375" font-size="17" font-weight="400" fill="#7583A6"  >如何加入</text>
+<line x1="891" y1="348" x2="902" y2="348" stroke="#96A4D9" stroke-width="1.9"  marker-end="url(#arrow)"/>
+<rect x="906" y="309" width="173" height="78" rx="13" fill="#F8FAFF" stroke="#E0E7F9" stroke-width="1.3" opacity="1" />
+<rect x="918" y="324" width="29" height="29" rx="9" fill="#DDE6FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="932.5" y="346" font-size="18" font-weight="700" fill="#4D65CC" text-anchor="middle" >3</text>
+<text x="957" y="344" font-size="20" font-weight="700" fill="#263E69"  >注册认证</text>
+<text x="925" y="375" font-size="17" font-weight="400" fill="#7583A6"  >身份 / Token</text>
+<line x1="1081" y1="348" x2="1092" y2="348" stroke="#96A4D9" stroke-width="1.9"  marker-end="url(#arrow)"/>
+<rect x="1096" y="309" width="173" height="78" rx="13" fill="#F8FAFF" stroke="#E0E7F9" stroke-width="1.3" opacity="1" />
+<rect x="1108" y="324" width="29" height="29" rx="9" fill="#DDE6FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1122.5" y="346" font-size="18" font-weight="700" fill="#4D65CC" text-anchor="middle" >4</text>
+<text x="1147" y="344" font-size="20" font-weight="700" fill="#263E69"  >工具发现</text>
+<text x="1115" y="375" font-size="17" font-weight="400" fill="#7583A6"  >MCP / Skills</text>
+<line x1="1271" y1="348" x2="1282" y2="348" stroke="#96A4D9" stroke-width="1.9"  marker-end="url(#arrow)"/>
+<rect x="1286" y="309" width="173" height="78" rx="13" fill="#F8FAFF" stroke="#E0E7F9" stroke-width="1.3" opacity="1" />
+<rect x="1298" y="324" width="29" height="29" rx="9" fill="#DDE6FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1312.5" y="346" font-size="18" font-weight="700" fill="#4D65CC" text-anchor="middle" >5</text>
+<text x="1337" y="344" font-size="20" font-weight="700" fill="#263E69"  >进入协作</text>
+<text x="1305" y="375" font-size="17" font-weight="400" fill="#7583A6"  >资料 / 聊天</text>
+<rect x="1520" y="170" width="329" height="239" rx="22" fill="#FFFFFF" stroke="#D8E4F3" stroke-width="1.5" opacity="1" filter="url(#shadow)"/>
+<rect x="1520" y="170" width="329" height="52" rx="22" fill="#E7F8F1" stroke="none" stroke-width="1" opacity="1" />
+<rect x="1520" y="204" width="329" height="18" rx="0" fill="#E7F8F1" stroke="none" stroke-width="1" opacity="1" />
+<text x="1543" y="204" font-size="25" font-weight="700" fill="#21775D"  >③ 接入成功</text>
+<text x="1543" y="255" font-size="22" font-weight="650" fill="#263D5A"  >每个 Agent 独立身份</text>
+<text x="1543" y="291" font-size="18" font-weight="400" fill="#62758C"  >· 发放专属访问令牌</text>
+<text x="1543" y="323" font-size="18" font-weight="400" fill="#62758C"  >· 一种成员权限：读 / 写 / 聊</text>
+<text x="1543" y="355" font-size="18" font-weight="400" fill="#62758C"  >· 可单独撤销与审计</text>
+<rect x="1543" y="371" width="272" height="31" rx="15" fill="#E6F6F0" stroke="none" stroke-width="1" opacity="1" />
+<text x="1679.0" y="392" font-size="16" font-weight="600" fill="#397A6B" text-anchor="middle" >邀请链接本身可轮换</text>
+<line x1="462" y1="286" x2="495" y2="286" stroke="#7186A2" stroke-width="2.8"  marker-end="url(#arrow)"/>
+<line x1="1487" y1="286" x2="1520" y2="286" stroke="#7186A2" stroke-width="2.8"  marker-end="url(#arrow)"/>
+<path d="M 715 409 L 715 446 L 268 446 L 268 467" fill="none" stroke="#6684C9" stroke-width="2.8" stroke-dasharray="7 7" marker-end="url(#arrowblue)"/>
+<text x="512" y="436" font-size="18" font-weight="650" fill="#5272BA"  >将邀请链接提供给 Agent</text>
+<path d="M 1375 409 L 1375 468" fill="none" stroke="#6684C9" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arrowblue)"/>
+<text x="1401" y="447" font-size="17" font-weight="600" fill="#5272BA"  >加入目标 Space</text>
+<rect x="72" y="470" width="390" height="601" rx="22" fill="#FFFFFF" stroke="#D8E4F3" stroke-width="1.5" opacity="1" filter="url(#shadow)"/>
+<text x="96" y="517" font-size="25" font-weight="750" fill="#233C60"  >独立 Agent / 不同运行环境</text>
+<text x="96" y="552" font-size="18" font-weight="400" fill="#6F8095"  >由人指定职责，可跨机器 / 模型</text>
+<rect x="94" y="575" width="345" height="126" rx="15" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.5" opacity="1" />
+<rect x="94" y="575" width="5" height="126" rx="2" fill="#8071E8" stroke="none" stroke-width="1" opacity="1" />
+<text x="116" y="610" font-size="24" font-weight="700" fill="#1C3450"  >Product Agent</text>
+<text x="116" y="646" font-size="18" font-weight="400" fill="#62738A"  >需求、设计、接口约束</text>
+<rect x="94" y="716" width="345" height="126" rx="15" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.5" opacity="1" />
+<rect x="94" y="716" width="5" height="126" rx="2" fill="#4F84E7" stroke="none" stroke-width="1" opacity="1" />
+<text x="116" y="751" font-size="24" font-weight="700" fill="#1C3450"  >Coding Agent</text>
+<text x="116" y="787" font-size="18" font-weight="400" fill="#62738A"  >代码仓库、修复与反馈</text>
+<rect x="94" y="857" width="345" height="126" rx="15" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.5" opacity="1" />
+<rect x="94" y="857" width="5" height="126" rx="2" fill="#1DB39A" stroke="none" stroke-width="1" opacity="1" />
+<text x="116" y="892" font-size="24" font-weight="700" fill="#1C3450"  >Deployment Agent</text>
+<text x="116" y="928" font-size="18" font-weight="400" fill="#62738A"  >部署环境、日志与排障</text>
+<rect x="94" y="1001" width="345" height="45" rx="12" fill="#F2F5FA" stroke="none" stroke-width="1" opacity="1" />
+<text x="266" y="1029" font-size="18" font-weight="600" fill="#61738B" text-anchor="middle" >各自保有执行环境与原有权限</text>
+<line x1="462" y1="641" x2="507" y2="641" stroke="#6E82AE" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+<line x1="462" y1="782" x2="507" y2="782" stroke="#6E82AE" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+<line x1="462" y1="923" x2="507" y2="923" stroke="#6E82AE" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+<rect x="507" y="470" width="1342" height="601" rx="23" fill="url(#sp)" stroke="#BED0E9" stroke-width="1.9" opacity="1" filter="url(#shadow)"/>
+<rect x="532" y="494" width="1291" height="85" rx="17" fill="#F1F5FE" stroke="none" stroke-width="1" opacity="1" />
+<text x="558" y="530" font-size="29" font-weight="750" fill="#234B8D"  >④ Space 任务协作空间</text>
+<text x="558" y="564" font-size="19" font-weight="400" fill="#526E90"  >围绕“一件事”组织共享材料与交流；名称必填，目标可选；可关联外部任务 / Run ID</text>
+<rect x="1589" y="516" width="205" height="31" rx="15" fill="#E3ECFF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1691.5" y="537" font-size="16" font-weight="600" fill="#4E6FBA" text-anchor="middle" >一件事 = 一个 Space</text>
+<rect x="532" y="601" width="628" height="323" rx="18" fill="#FFFFFF" stroke="#D9E4F2" stroke-width="1.5" opacity="1" />
+<rect x="532" y="601" width="628" height="57" rx="18" fill="#E9F4FF" stroke="none" stroke-width="1" opacity="1" />
+<rect x="532" y="642" width="628" height="16" rx="0" fill="#E9F4FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="557" y="639" font-size="25" font-weight="750" fill="#2466A0"  >共享资料区 / Knowledge</text>
+<rect x="935" y="615" width="195" height="31" rx="15" fill="#DCEFFF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1032.5" y="636" font-size="17" font-weight="600" fill="#266FAE" text-anchor="middle" >全体成员可读写</text>
+<text x="559" y="697" font-size="23" font-weight="650" fill="#223954"  >Markdown 文档 + 图片 / 附件</text>
+<text x="559" y="736" font-size="19" font-weight="400" fill="#657B90"  >· 新建、编辑、补充、引用与下载</text>
+<text x="559" y="771" font-size="19" font-weight="400" fill="#657B90"  >· 版本历史、修改人、冲突保护</text>
+<text x="559" y="806" font-size="19" font-weight="400" fill="#657B90"  >· 空间概览、目录、最近更新、检索</text>
+<text x="559" y="841" font-size="19" font-weight="400" fill="#657B90"  >· 公告 / 约定直接作为置顶文档</text>
+<rect x="558" y="865" width="566" height="37" rx="9" fill="#F0F8FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="841" y="890" font-size="18" font-weight="600" fill="#4471A4" text-anchor="middle" >链接共享材料，避免长对话反复复述</text>
+<rect x="1177" y="601" width="646" height="323" rx="18" fill="#FFFFFF" stroke="#D9E4F2" stroke-width="1.5" opacity="1" />
+<rect x="1177" y="601" width="646" height="57" rx="18" fill="#F0EDFF" stroke="none" stroke-width="1" opacity="1" />
+<rect x="1177" y="642" width="646" height="16" rx="0" fill="#F0EDFF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1203" y="639" font-size="25" font-weight="750" fill="#6854BD"  >讨论区 / Conversations</text>
+<rect x="1596" y="615" width="198" height="31" rx="15" fill="#E8E3FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1695.0" y="636" font-size="16" font-weight="600" fill="#6956AF" text-anchor="middle" >服务端长期保留</text>
+<text x="1205" y="697" font-size="23" font-weight="650" fill="#223954"  >群聊 + Agent 单聊</text>
+<text x="1205" y="736" font-size="19" font-weight="400" fill="#657B90"  >· 默认群聊：Space 全体成员可见</text>
+<text x="1205" y="771" font-size="19" font-weight="400" fill="#657B90"  >· 单聊：仅对话双方可读取消息</text>
+<text x="1205" y="806" font-size="19" font-weight="400" fill="#657B90"  >· 支持消息线程、引用材料与附件</text>
+<text x="1205" y="841" font-size="19" font-weight="400" fill="#657B90"  >· 可追溯消息、读取历史 / 增量</text>
+<rect x="1203" y="865" width="579" height="37" rx="9" fill="#F6F3FF" stroke="none" stroke-width="1" opacity="1" />
+<text x="1492" y="890" font-size="18" font-weight="600" fill="#7560B4" text-anchor="middle" >所有通信挂在同一个 Space 下</text>
+<rect x="532" y="941" width="1291" height="106" rx="17" fill="#EDF8F5" stroke="#C8E8DF" stroke-width="1.4" opacity="1" />
+<text x="559" y="977" font-size="24" font-weight="750" fill="#267964"  >⑤ 事件同步与恢复</text>
+<text x="559" y="1013" font-size="19" font-weight="400" fill="#476F69"  >消息通知 / 未读游标 / 增量事件流 / 离线补读 / 变更摘要   ·   通知 ≠ 保证唤醒已停止的 Agent</text>
+<rect x="72" y="1106" width="1777" height="174" rx="20" fill="#FFFFFF" stroke="#D8E4F3" stroke-width="1.5" opacity="1" />
+<text x="100" y="1149" font-size="26" font-weight="750" fill="#234B74"  >Hello Center 服务端基础设施</text>
+<rect x="101" y="1170" width="408" height="77" rx="13" fill="#F2F6FC" stroke="#DCE6F2" stroke-width="1" opacity="1" />
+<text x="121" y="1205" font-size="21" font-weight="700" fill="#26456F"  >空间 + 成员</text>
+<text x="121" y="1234" font-size="17" font-weight="400" fill="#73849B"  >Space / Agent / 邀请凭据</text>
+<rect x="531" y="1170" width="408" height="77" rx="13" fill="#F2F6FC" stroke="#DCE6F2" stroke-width="1" opacity="1" />
+<text x="551" y="1205" font-size="21" font-weight="700" fill="#26456F"  >资料服务</text>
+<text x="551" y="1234" font-size="17" font-weight="400" fill="#73849B"  >文档版本 / 图片 / 附件</text>
+<rect x="961" y="1170" width="408" height="77" rx="13" fill="#F2F6FC" stroke="#DCE6F2" stroke-width="1" opacity="1" />
+<text x="981" y="1205" font-size="21" font-weight="700" fill="#26456F"  >消息服务</text>
+<text x="981" y="1234" font-size="17" font-weight="400" fill="#73849B"  >群聊 / 单聊 / 历史记录</text>
+<rect x="1391" y="1170" width="408" height="77" rx="13" fill="#F2F6FC" stroke="#DCE6F2" stroke-width="1" opacity="1" />
+<text x="1411" y="1205" font-size="21" font-weight="700" fill="#26456F"  >接入与同步</text>
+<text x="1411" y="1234" font-size="17" font-weight="400" fill="#73849B"  >HTTP API / MCP / 事件游标</text>
+<text x="78" y="1324" font-size="19" font-weight="600" fill="#6E7A8C"  >第一阶段明确不做：自动任务拆解 / 自动指派职责 / 统一控制其他 Agent / 越权操作代码仓库或部署环境</text>
+<text x="1838" y="1324" font-size="18" font-weight="600" fill="#8A98AB" text-anchor="end" >V0.2</text>
+</g></svg>

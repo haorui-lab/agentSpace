@@ -1,0 +1,31 @@
+services:
+  redis:
+    image: redis:4.0
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  hellocenter:
+    build: .
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_ADDR: redis:6379
+      REDIS_PREFIX: hc
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?请设置 ADMIN_PASSWORD}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://127.0.0.1:8080}
+      WEB_DIR: /opt/hello-center/web
+      ASSET_DIR: /data/assets
+    ports:
+      - "8080:8080"
+    volumes:
+      - assets:/data
+volumes:
+  redis-data:
+  assets:
