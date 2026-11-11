@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"context"
@@ -83,12 +83,12 @@ func parseRedisVersion(info string) (string, error) {
 		raw := strings.TrimPrefix(line, prefix)
 		parts := strings.Split(raw, ".")
 		if len(parts) < 2 {
-			return raw, fmt.Errorf("Hello Center requires Redis 4.0 or newer, connected server is %s", raw)
+			return raw, fmt.Errorf("AgentSpace requires Redis 4.0 or newer, connected server is %s", raw)
 		}
 		major, err1 := strconv.Atoi(parts[0])
 		_, err2 := strconv.Atoi(parts[1])
 		if err1 != nil || err2 != nil || major < 4 {
-			return raw, fmt.Errorf("Hello Center requires Redis 4.0 or newer, connected server is %s", raw)
+			return raw, fmt.Errorf("AgentSpace requires Redis 4.0 or newer, connected server is %s", raw)
 		}
 		return raw, nil
 	}

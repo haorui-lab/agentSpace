@@ -1,4 +1,4 @@
-// Package skill is the Hello Center operating guide served from invitation links.
+// Package skill is the AgentSpace operating guide served from invitation links.
 package skill
 
 import _ "embed"

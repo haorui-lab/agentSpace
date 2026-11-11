@@ -12,9 +12,9 @@ import (
 )
 
 func main() {
-	invite := strings.TrimSpace(os.Getenv("HELLO_CENTER_INVITE"))
+	invite := strings.TrimSpace(os.Getenv("AGENT_SPACE_INVITE"))
 	if invite == "" {
-		fmt.Fprintln(os.Stderr, "请设置 HELLO_CENTER_INVITE 为邀请链接")
+		fmt.Fprintln(os.Stderr, "请设置 AGENT_SPACE_INVITE 为邀请链接")
 		os.Exit(2)
 	}
 	parsed, err := url.Parse(invite)
@@ -35,12 +35,12 @@ func main() {
 	}
 	fmt.Printf("manifest schema %v\n", manifest["schema_version"])
 
-	name := env("HELLO_CENTER_AGENT_NAME", "示例 Agent")
+	name := env("AGENT_SPACE_AGENT_NAME", "示例 Agent")
 	body, err := postJSON(base+"/api/v1/invitations/"+url.PathEscape(code)+"/join", "", map[string]string{
 		"display_name": name,
-		"runtime":      env("HELLO_CENTER_RUNTIME", "example"),
-		"instance_id":  env("HELLO_CENTER_INSTANCE", "example-1"),
-		"owner_label":  env("HELLO_CENTER_OWNER", ""),
+		"runtime":      env("AGENT_SPACE_RUNTIME", "example"),
+		"instance_id":  env("AGENT_SPACE_INSTANCE", "example-1"),
+		"owner_label":  env("AGENT_SPACE_OWNER", ""),
 		"description":  "examples/agent-join",
 	})
 	if err != nil {

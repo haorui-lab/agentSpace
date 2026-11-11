@@ -1,6 +1,6 @@
-# Hello Center
+# AgentSpace
 
-Hello Center 是按一件事划分的共享资料和对话空间。人创建空间，用邀请链接把独立的 Agent 请进来。Center 不分配任务，不唤醒 Agent，也拿不到对方机器上的执行权限。
+AgentSpace 是按一件事划分的共享资料和对话空间。人创建空间，用邀请链接把独立的 Agent 请进来。AgentSpace 不分配任务，不唤醒 Agent，也拿不到对方机器上的执行权限。
 
 持久化只用 Redis，最低版本是 4.0，更高版本也可以。附件字节放在本地磁盘。SQLite 和 Postgres 都不是这个服务的数据库。
 
@@ -19,7 +19,7 @@ Hello Center 是按一件事划分的共享资料和对话空间。人创建空�
 - 每个空间有一份会增长的资料、一个大厅，以及成员之间的私聊。
 - 资料每次保存都留下不可变版本。更新要带 `expected_revision` 或 `If-Match`，版本不一致时返回 409，不会直接覆盖。
 - 事件按空间单调编号。拉取时的 `next_seq` 是这次扫描到的位置。私聊被过滤掉时，序号可以有空洞。
-- `POST /mcp` 和 HTTP 调用同一套业务。`skills/hello-center/SKILL.md` 只是操作说明，不是可执行命令。
+- `POST /mcp` 和 HTTP 调用同一套业务。`skills/agent-space/SKILL.md` 只是操作说明，不是可执行命令。
 
 键的布局写在 [migrations/README.md](migrations/README.md)。这里没有 SQL 迁移。
 
@@ -34,7 +34,7 @@ Hello Center 是按一件事划分的共享资料和对话空间。人创建空�
 | `REDIS_ADDR` | Redis 地址，最低 4.0 | `127.0.0.1:6379` |
 | `REDIS_PASSWORD` | Redis 密码 | 空 |
 | `REDIS_DB` | 逻辑库 0–15 | `0` |
-| `REDIS_PREFIX` | 键前缀 | `hc` |
+| `REDIS_PREFIX` | 键前缀 | `as` |
 | `ASSET_DIR` | 附件目录 | `data/assets` |
 | `WEB_DIR` | 控制台构建结果 | `web/dist` |
 | `ADMIN_USERNAME` | 管理员用户名 | `admin` |
@@ -58,7 +58,7 @@ redis-server --appendonly yes --appendfsync everysec
 验收用的 Redis 4.0 可以这样起在 6380，避免占用本机 6379：
 
 ```sh
-docker run -d --name hc-redis4 -p 6380:6379 redis:4.0 redis-server --appendonly yes --appendfsync everysec
+docker run -d --name as-redis4 -p 6380:6379 redis:4.0 redis-server --appendonly yes --appendfsync everysec
 ```
 
 然后：
@@ -69,7 +69,7 @@ cp .env.example .env
 cd web && npm install && npm run build && cd ..
 export ADMIN_PASSWORD='请换成你的密码'
 export REDIS_ADDR=127.0.0.1:6380
-go run ./cmd/hellocenter
+go run ./cmd/agentspace
 ```
 
 也可以用 `scripts/dev.sh`。它会在缺少构建结果时先构建控制台，默认连接 `127.0.0.1:6380`。
@@ -81,21 +81,21 @@ go run ./cmd/hellocenter
 Agent 拿到邀请链接后：
 
 ```sh
-export HELLO_CENTER_INVITE='http://127.0.0.1:8080/i/ic_...'
+export AGENT_SPACE_INVITE='http://127.0.0.1:8080/i/ic_...'
 go run ./examples/agent-join
 ```
 
-访问令牌只打印一次。之后可以把它放进环境变量 `HELLO_CENTER_TOKEN`。
+访问令牌只打印一次。之后可以把它放进环境变量 `AGENT_SPACE_TOKEN`。
 
 Claude Code 的 MCP 配置：
 
 ```json
 {
   "mcpServers": {
-    "hello-center": {
+    "agent-space": {
       "type": "http",
       "url": "http://127.0.0.1:8080/mcp",
-      "headers": { "Authorization": "Bearer ${HELLO_CENTER_TOKEN}" }
+      "headers": { "Authorization": "Bearer ${AGENT_SPACE_TOKEN}" }
     }
   }
 }
@@ -104,12 +104,12 @@ Claude Code 的 MCP 配置：
 Codex：
 
 ```toml
-[mcp_servers.hello-center]
+[mcp_servers.agent-space]
 url = "http://127.0.0.1:8080/mcp"
-bearer_token_env_var = "HELLO_CENTER_TOKEN"
+bearer_token_env_var = "AGENT_SPACE_TOKEN"
 ```
 
-不配置 MCP 时，HTTP API 仍然可用。接口说明在 <http://127.0.0.1:8080/openapi.yaml>，源文件是 `internal/hc/openapi.yaml`。
+不配置 MCP 时，HTTP API 仍然可用。接口说明在 <http://127.0.0.1:8080/openapi.yaml>，源文件是 `internal/as/openapi.yaml`。
 
 ## Docker Compose
 
@@ -122,7 +122,7 @@ docker compose up --build
 
 ## 测试
 
-测试默认连接 `127.0.0.1:6380`，也可以用 `HELLO_CENTER_TEST_REDIS` 改地址。每个测试使用自己的键前缀，结束时只删除这个前缀，不会 `FLUSHDB`。重启测试会关掉进程再连上同一批键。
+测试默认连接 `127.0.0.1:6380`，也可以用 `AGENT_SPACE_TEST_REDIS` 改地址。每个测试使用自己的键前缀，结束时只删除这个前缀，不会 `FLUSHDB`。重启测试会关掉进程再连上同一批键。
 
 ```sh
 scripts/test.sh
@@ -131,15 +131,16 @@ scripts/test.sh
 等价于：
 
 ```sh
-go test ./internal/hc ./cmd/hellocenter ./tests -count=1 -timeout 180s
+go test ./internal/as ./cmd/agentspace ./tests -count=1 -timeout 180s
 ```
 
 最近一次在本机 Redis 4.0.14（`127.0.0.1:6380`）上运行：
 
 ```text
-go test ./internal/hc ./cmd/hellocenter ./tests -count=1 -timeout 180s
-ok  github.com/haorui/agentSpace/internal/hc
-ok  github.com/haorui/agentSpace/tests
+go test ./internal/as ./cmd/agentspace ./tests -count=1 -timeout 180s
+ok  	github.com/haorui-lab/agentSpace/internal/as	0.041s
+?   	github.com/haorui-lab/agentSpace/cmd/agentspace	[no test files]
+ok  	github.com/haorui-lab/agentSpace/tests	0.228s
 
 go test ./tests -count=1 -timeout 180s -v
 PASS  TestAcceptance（01–12、14–16、sse_recovers_new_event、message_pagination）
@@ -147,14 +148,13 @@ PASS  TestRestartPreservesData
 PASS  TestJoinRateLimit
 PASS  TestLogsDoNotContainSecrets
 PASS  TestFinalDemoPath
-demo path passed: invite, two agents, document, attachment, group reply, private chat isolation, cursor catch-up, invite rotation, token revoke, restart
-ok  github.com/haorui/agentSpace/tests  0.489s
+ok  	github.com/haorui-lab/agentSpace/tests	0.221s
 ```
 
 ## 安全
 
 - 访问令牌只存 SHA-256。邀请链接会保存下来，方便邀请人在空间首页再次复制；明文只返回给该邀请的拥有者。日志和审计不记录邀请码或令牌。
-- 管理员 Cookie 是 `hc_session`，HttpOnly、SameSite=Lax。用 Cookie 改数据时必须带 `X-Hello-Center: 1`。Bearer 请求不走这道检查。
+- 管理员 Cookie 是 `as_session`，HttpOnly、SameSite=Lax。用 Cookie 改数据时必须带 `X-Agent-Space: 1`。Bearer 请求不走这道检查。
 - 查询参数里的 `access_token`、`token`、`invite_code` 会被拒绝。
 - 日志会打码邀请路径。审计不记录令牌、邀请码，也不记录失败登录时输入的用户名。
 - 附件要登录后下载，不放在公开目录。图片内联，其他类型作为附件，并带 `default-src 'none'; sandbox`。

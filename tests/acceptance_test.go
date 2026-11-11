@@ -23,13 +23,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/haorui/agentSpace/internal/hc"
+	"github.com/haorui-lab/agentSpace/internal/as"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type env struct {
 	t      *testing.T
-	app    *hc.Server
+	app    *as.Server
 	srv    *httptest.Server
 	dir    string
 	logs   *bytes.Buffer
@@ -57,9 +57,9 @@ func openEnv(t *testing.T, dir string, logs *bytes.Buffer, joinLimit int, prefix
 	if prefix == "" {
 		prefix = testPrefix()
 	}
-	cfg := hc.Config{
+	cfg := as.Config{
 		RedisAddr:          testRedisAddr(),
-		RedisPassword:      os.Getenv("HELLO_CENTER_TEST_REDIS_PASSWORD"),
+		RedisPassword:      os.Getenv("AGENT_SPACE_TEST_REDIS_PASSWORD"),
 		KeyPrefix:          prefix,
 		AssetDir:           filepath.Join(dir, "assets"),
 		WebDir:             filepath.Join(dir, "no-web"),
@@ -72,7 +72,7 @@ func openEnv(t *testing.T, dir string, logs *bytes.Buffer, joinLimit int, prefix
 		SSEPollInterval:    30 * time.Millisecond,
 		Logger:             slog.New(slog.NewTextHandler(logs, nil)),
 	}
-	app, err := hc.Open(cfg)
+	app, err := as.Open(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,7 +109,7 @@ func (e *env) restart(t *testing.T) *env {
 }
 
 func testRedisAddr() string {
-	if v := strings.TrimSpace(os.Getenv("HELLO_CENTER_TEST_REDIS")); v != "" {
+	if v := strings.TrimSpace(os.Getenv("AGENT_SPACE_TEST_REDIS")); v != "" {
 		return v
 	}
 	return "127.0.0.1:6380"
@@ -120,7 +120,7 @@ func testPrefix() string {
 	if _, err := rand.Read(b[:]); err != nil {
 		panic(err)
 	}
-	return "hc:t:" + hex.EncodeToString(b[:])
+	return "as:t:" + hex.EncodeToString(b[:])
 }
 
 func start(t *testing.T) *env {
@@ -159,7 +159,7 @@ func (a *api) do(t *testing.T, method, path string, body any, contentType string
 	if err != nil {
 		t.Fatal(err)
 	}
-	req.Header.Set("X-Hello-Center", "1")
+	req.Header.Set("X-Agent-Space", "1")
 	if contentType != "" {
 		req.Header.Set("Content-Type", contentType)
 	}
@@ -445,7 +445,7 @@ func TestAcceptance(t *testing.T) {
 		}
 		skillBody, _ := io.ReadAll(skillRes.Body)
 		skillRes.Body.Close()
-		if !strings.Contains(string(skillBody), "hello-center") {
+		if !strings.Contains(string(skillBody), "agent-space") {
 			t.Fatalf("skills %s", skillBody)
 		}
 	})
@@ -755,7 +755,7 @@ func TestAcceptance(t *testing.T) {
 
 	t.Run("14_mcp_matches_http", func(t *testing.T) {
 		initResult := mcp(t, e.srv.URL, agentA.token, "initialize", map[string]any{"protocolVersion": "2025-06-18", "capabilities": map[string]any{}, "clientInfo": map[string]string{"name": "test", "version": "0"}})
-		if str(obj(t, initResult, "serverInfo"), "name") != "hello-center" {
+		if str(obj(t, initResult, "serverInfo"), "name") != "agent-space" {
 			t.Fatal(initResult)
 		}
 		listed := mcp(t, e.srv.URL, agentA.token, "tools/list", map[string]any{})

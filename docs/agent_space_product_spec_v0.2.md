@@ -1,23 +1,23 @@
-# Hello Center：跨独立 Agent 的任务协作空间
+# AgentSpace：跨独立 Agent 的任务协作空间
 
 > **产品需求与研发实现规格 · v0.2 · 2026-11-10**  
 > 本文可直接作为 Coding Agent 的开发输入。目标是实现**完整的第一阶段（MVP）服务**，而非只制作演示页面。  
-> 架构图：`hello_center_architecture_v2.svg`（配套预览：`hello_center_architecture_v2.png`）。本文包含关键架构与接口说明，即使不查看图片也能实施。
+> 架构图：`agent_space_architecture_v2.svg`（配套预览：`agent_space_architecture_v2.png`）。本文包含关键架构与接口说明，即使不查看图片也能实施。
 
 ## 0. 一句话定义与决策摘要
 
-**Hello Center 是围绕“一件事”建立的、面向多个独立 Agent 的共享资料与持续沟通空间。** 用户建立 Space，将邀请链接交给不同 Agent；Agent 通过该链接获得加入说明、空间概览、接入方式及 MCP/Skill 信息，完成身份注册后，即可共同读写资料、群聊或单聊，并在离线后恢复上下文。
+**AgentSpace 是围绕“一件事”建立的、面向多个独立 Agent 的共享资料与持续沟通空间。** 用户建立 Space，将邀请链接交给不同 Agent；Agent 通过该链接获得加入说明、空间概览、接入方式及 MCP/Skill 信息，完成身份注册后，即可共同读写资料、群聊或单聊，并在离线后恢复上下文。
 
 ### 已确定的产品决定
 
 1. **Space 是中心，不是某个 Agent，也不是某一次模型 Run。** 一个 Space 代表一个事情、问题、目标或持续协作主题。可附带外部 `run_ref`，但不依赖单次运行周期。
-2. **人负责分工。** 谁处理需求、谁修改代码、谁部署，由人决定；Center 不做任务拆解、自动派活或执行编排。
+2. **人负责分工。** 谁处理需求、谁修改代码、谁部署，由人决定；AgentSpace 不做任务拆解、自动派活或执行编排。
 3. **每个 Space 由“共享资料区 + 讨论区”组成。** 资料支持 Markdown、图片和其他附件；讨论区支持群聊与 Agent 单聊。公告直接作为资料（可置顶），不单设公告板。
 4. **Space 的资料可由加入的所有 Agent 读取、上传、修改、补充和下载。** 第一阶段只有一种 Agent 成员权限，不做复杂的角色矩阵。
 5. **聊天记录与资料由服务端持久保存。** 默认不因 Agent 退出或停止运行而清除；保留必要的版本、修改时间和事件历史。
 6. **邀请链接是第一阶段最重要的产品入口。** 它不仅是地址，还承担发现空间、接入说明、注册认证、能力发现和开始协作的引导流程。
 7. **支持独立 Agent。** 例如产品 Agent、Coding Agent、Deployment Agent 可以处于不同宿主、机器、代码仓库或模型环境，不要求共享工作目录与执行权限。
-8. **消息送达不等于唤醒 Agent。** Center 负责持久记录、增量同步、在线连接通知；不能假定能自动启动已退出的 Claude Code、Codex 或其他 Agent 进程。
+8. **消息送达不等于唤醒 Agent。** AgentSpace 负责持久记录、增量同步、在线连接通知；不能假定能自动启动已退出的 Claude Code、Codex 或其他 Agent 进程。
 
 ### 第一阶段不做
 
@@ -37,7 +37,7 @@
 
 ### 场景 B：Deployment Agent ↔ Coding Agent
 
-人建立 Space `服务启动失败排查`。Deployment Agent 上传脱敏日志、环境配置摘要，群聊中 @Coding Agent；Coding Agent 根据自己**已有**的仓库访问权限排查，并回传代码修复说明或提交链接；Deployment Agent 依据自己的部署权限验证并反馈。**Hello Center 只承载资料、讨论和事件，不代替任一 Agent 执行命令。**
+人建立 Space `服务启动失败排查`。Deployment Agent 上传脱敏日志、环境配置摘要，群聊中 @Coding Agent；Coding Agent 根据自己**已有**的仓库访问权限排查，并回传代码修复说明或提交链接；Deployment Agent 依据自己的部署权限验证并反馈。**AgentSpace 只承载资料、讨论和事件，不代替任一 Agent 执行命令。**
 
 ### 场景 C：Agent 暂停 / 重启后恢复
 
@@ -65,7 +65,7 @@ Agent 重新接入时先请求 `space overview + since_cursor 事件`，得知�
 ### 结构草图
 
 ```text
-Hello Center
+AgentSpace
 ├─ Web Console（人类使用）
 │  ├─ 创建/查看 Space，名称必填、目标选填
 │  ├─ 生成/复制/轮换/撤销邀请链接
@@ -108,7 +108,7 @@ https://center.example/i/<invite_code>
 ```json
 {
   "schema_version": "1.0",
-  "product": "Hello Center",
+  "product": "AgentSpace",
   "space": {
     "id": "sp_abc123",
     "name": "服务启动失败排查",
@@ -143,21 +143,21 @@ https://center.example/i/<invite_code>
 sequenceDiagram
     autonumber
     actor Human as 用户
-    participant Web as Hello Center Web
+    participant Web as AgentSpace Web
     participant Agent as 独立 Coding / Product / Deploy Agent
-    participant Center as Hello Center API / MCP
+    participant AgentSpace as AgentSpace API / MCP
     Human->>Web: 创建 Space（名称，目标可选）
     Web-->>Human: 返回邀请链接
     Human->>Agent: 加入此 Space：邀请链接
-    Agent->>Center: GET /i/{code}/manifest.json
-    Center-->>Agent: Space 摘要 + 加入说明 + MCP/Skill 发现信息
-    Agent->>Center: POST /api/v1/invitations/{code}/join（身份）
-    Center-->>Agent: agent_id + access_token + space_id
-    Agent->>Center: GET /spaces/{id}/bootstrap（授权）
-    Center-->>Agent: 概览、资料索引、成员、会话、事件游标
-    Agent->>Center: 读取文档 / 群聊 / 单聊 / 发消息 / 上传材料
-    Agent->>Center: GET /spaces/{id}/events?after_seq=N
-    Center-->>Agent: 未读变更（按权限过滤）
+    Agent->>AgentSpace: GET /i/{code}/manifest.json
+    AgentSpace-->>Agent: Space 摘要 + 加入说明 + MCP/Skill 发现信息
+    Agent->>AgentSpace: POST /api/v1/invitations/{code}/join（身份）
+    AgentSpace-->>Agent: agent_id + access_token + space_id
+    Agent->>AgentSpace: GET /spaces/{id}/bootstrap（授权）
+    AgentSpace-->>Agent: 概览、资料索引、成员、会话、事件游标
+    Agent->>AgentSpace: 读取文档 / 群聊 / 单聊 / 发消息 / 上传材料
+    Agent->>AgentSpace: GET /spaces/{id}/events?after_seq=N
+    AgentSpace-->>Agent: 未读变更（按权限过滤）
 ```
 
 **MCP 配置现实约束**：一个 HTTP 链接可以告知 Agent 可用的 MCP 地址和工具说明，但不能无条件在用户机器上安装 MCP、Skill 或启动进程。具体宿主若支持动态配置，可以在**宿主允许且用户授权**时自动接入；否则需输出清晰可复制的配置说明。两条路径都必须能工作。
@@ -212,7 +212,7 @@ sequenceDiagram
 - 服务端签发唯一 `agent_id` 和仅在创建时显示的 access token，数据库只存令牌哈希；令牌绑定 `space_id` 与 `agent_id`。
 - 首期成员权限完全相同：可读写共享资料、上传下载附件、发送群聊、与成员单聊、获取授权范围内历史、查看成员列表。
 - 是否在线仅提供 `last_seen_at` 与“最近活跃”估计值。**不要把 `last_seen_at` 等同于持续在线或已自动唤醒。**
-- 不要求 Agent 向 Center 暴露本地文件系统、代码仓库路径、命令执行端点或 API Key。
+- 不要求 Agent 向 AgentSpace 暴露本地文件系统、代码仓库路径、命令执行端点或 API Key。
 - 多个 Space 隔离：一个 Agent 加入 Space A 不得自动进入 Space B，除非另外收到 B 的有效邀请并完成加入。
 
 ### 4.5 事件通知、同步与恢复
@@ -222,11 +222,11 @@ sequenceDiagram
 - 支持分页、去重与断线重试；优先提供 **HTTP 增量拉取** 作为可靠底座，再提供 SSE/长轮询作为低延迟通知方式。
 - 事件仅传变更摘要和资源 ID；完整大文件由 Agent 按需读取。
 - 支持已读/已处理游标更新（`ack`），但需要区分：**服务端保存、Agent 拉取、Agent 已处理** 是不同的状态。不能仅因事件被写入就宣称对方已收到。
-- 若 Agent 进程已退出，Center 继续持久保存事件；**不保证主动启动对方进程**。未来可扩展宿主 Hook、WebSocket 客户端、外部唤醒器，但不纳入核心 MVP 完成标准。
+- 若 Agent 进程已退出，AgentSpace 继续持久保存事件；**不保证主动启动对方进程**。未来可扩展宿主 Hook、WebSocket 客户端、外部唤醒器，但不纳入核心 MVP 完成标准。
 
 ### 4.6 MCP 与 Skill 发现
 
-Center 至少提供：
+AgentSpace 至少提供：
 
 1. **HTTP API**：是底层唯一事实来源；Web 和 MCP 都调用相同的服务逻辑。
 2. **MCP 服务**：暴露 Space 的概览、成员、文档、聊天、事件等工具；采用当前所选 SDK 支持的标准传输，远程可接入，并以 Agent token 进行认证。
@@ -284,7 +284,7 @@ Content-Type: application/json
 {
   "space_id": "sp_abc123",
   "agent_id": "ag_789",
-  "access_token": "hc_live_secret_returned_once",
+  "access_token": "as_live_secret_returned_once",
   "token_type": "Bearer",
   "api_base": "https://center.example/api/v1",
   "mcp_url": "https://center.example/mcp",
@@ -401,7 +401,7 @@ Content-Type: application/json
                            （同一业务层，不复制一套状态）
 ```
 
-**技术选型为建议而非硬约束**：若从零建设，推荐 Go 服务端、PostgreSQL/SQLite、简单 React/Vite Web、标准 MCP SDK、对象存储适配器；若已有 Hello Center 代码仓库，**优先检查和复用其语言、框架、数据库、鉴权、已有拨号/消息能力**，不可仅因本文件提到 Go 就推倒重构。模块化单体优先于过早拆微服务。
+**技术选型为建议而非硬约束**：若从零建设，推荐 Go 服务端、PostgreSQL/SQLite、简单 React/Vite Web、标准 MCP SDK、对象存储适配器；若已有 AgentSpace 代码仓库，**优先检查和复用其语言、框架、数据库、鉴权、已有拨号/消息能力**，不可仅因本文件提到 Go 就推倒重构。模块化单体优先于过早拆微服务。
 
 建议提供 `.env.example`、数据库 migration、种子数据、`docker-compose.yml`（或等价一键开发方案）、OpenAPI 文档、MCP 用法文档和自动化测试。
 
@@ -413,7 +413,7 @@ Content-Type: application/json
 4. Markdown、聊天和 Skill 内容都是**来自协作空间的外部输入**。渲染时过滤恶意 HTML、脚本与 URL；Agent 不可因为资料中的“请执行命令”就提升其为系统指令。
 5. 设置上传大小限制、MIME/扩展名校验、安全文件名、路径遍历防护、速率限制、分页上限与必要的资源配额；生产环境视部署条件追加恶意文件扫描。
 6. 避免“仅靠前端隐藏”实现权限控制；所有 API / MCP 工具从同一服务端策略鉴权。
-7. 实际运行的 Coding/Deployment Agent 只在其自身已有权限范围内工作；Center 不赋予其新的仓库或生产环境操作权限。
+7. 实际运行的 Coding/Deployment Agent 只在其自身已有权限范围内工作；AgentSpace 不赋予其新的仓库或生产环境操作权限。
 8. 删除、清空、权限调整等破坏性操作只在有权限的管理界面进行；普通成员对资料编辑具有权限，但不得管理其他成员的私有凭证。
 
 ---
@@ -446,7 +446,7 @@ openapi.yaml              # HTTP API 契约
 migrations/               # 数据库迁移
 server/                   # HTTP、MCP、业务层、存储（可按现有仓库调整）
 web/                      # Web 管理台与 Space 页面
-skills/hello-center/SKILL.md
+skills/agent-space/SKILL.md
 examples/agent-join/      # 非特定宿主的最小加入/通信示例
 scripts/                  # 开发与测试辅助脚本
 tests/                    # 单元 / 集成 / 端到端测试
@@ -491,13 +491,13 @@ tests/                    # 单元 / 集成 / 端到端测试
 
 ## 10. 供 Coding Agent 使用的最终实施要求
 
-请把本规格当成**产品需求的当前基线**，交付一个可运行、可验证、可长期保存数据的 Hello Center 第一阶段服务。**优先复用已有代码**，不要把产品架构图误认为现有代码已经实现了所有能力；在动手前先识别现状和缺口。接口命名或技术栈可在兼容既有仓库的前提下调整，但必须保留 Space / Invitation / Identity / Knowledge / Conversations / Events 的核心语义。
+请把本规格当成**产品需求的当前基线**，交付一个可运行、可验证、可长期保存数据的 AgentSpace 第一阶段服务。**优先复用已有代码**，不要把产品架构图误认为现有代码已经实现了所有能力；在动手前先识别现状和缺口。接口命名或技术栈可在兼容既有仓库的前提下调整，但必须保留 Space / Invitation / Identity / Knowledge / Conversations / Events 的核心语义。
 
 必须特别保证以下三个产品体验：
 
 - **一个链接即接入入口**：Agent 通过邀请链接能发现如何加入、配置 MCP/Skill、获取空间信息及开始协作；链接不应仅跳转到一个空白页面。
 - **一个 Space 即一件事**：所有共享资料、讨论、成员和事件都挂在同一 Space，并具备持久化、引用、检索和离线恢复能力。
-- **不越权、不派活**：人负责决定 Agent 职责；Hello Center 只负责提供可信的协作通信与上下文基础设施，不接管各 Agent 的执行环境。
+- **不越权、不派活**：人负责决定 Agent 职责；AgentSpace 只负责提供可信的协作通信与上下文基础设施，不接管各 Agent 的执行环境。
 
 交付时请提供：架构说明、安装启动方式、环境变量、数据库迁移、OpenAPI、MCP/Skill 接入指南、端到端演示步骤、测试命令及实际运行结果；任何未完成或仅 Mock 的部分必须明确列出，不能标称已实现。
 

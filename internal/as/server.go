@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"context"
@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/haorui/agentSpace/skills/hello-center"
+	"github.com/haorui-lab/agentSpace/skills/agent-space"
 )
 
-// Server is the Hello Center process: one business layer behind HTTP and MCP.
+// Server is the AgentSpace process: one business layer behind HTTP and MCP.
 type Server struct {
 	cfg      Config
 	st       *store
@@ -194,8 +194,8 @@ func (s *Server) middleware(next http.Handler) http.Handler {
 				return
 			}
 		}
-		if s.needsCSRF(r) && r.Header.Get("X-Hello-Center") != "1" {
-			s.writeErr(w, forbidden("missing X-Hello-Center header"))
+		if s.needsCSRF(r) && r.Header.Get("X-Agent-Space") != "1" {
+			s.writeErr(w, forbidden("missing X-Agent-Space header"))
 			return
 		}
 		if s.isWrite(r) && !strings.HasSuffix(r.URL.Path, "/join") && !strings.HasSuffix(r.URL.Path, "/admin/login") {
@@ -224,7 +224,7 @@ func (s *Server) needsCSRF(r *http.Request) bool {
 	if r.Header.Get("Authorization") != "" {
 		return false
 	}
-	if _, err := r.Cookie("hc_session"); err == nil {
+	if _, err := r.Cookie("as_session"); err == nil {
 		return true
 	}
 	// Login is a cookie-setting mutation and must also opt in.

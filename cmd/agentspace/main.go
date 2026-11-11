@@ -13,19 +13,19 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/haorui/agentSpace/internal/hc"
+	"github.com/haorui-lab/agentSpace/internal/as"
 )
 
 func main() {
 	loadDotEnv(".env")
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	dataDir := env("DATA_DIR", "data")
-	cfg := hc.Config{
+	cfg := as.Config{
 		PublicBaseURL:      strings.TrimRight(os.Getenv("PUBLIC_BASE_URL"), "/"),
 		RedisAddr:          env("REDIS_ADDR", "127.0.0.1:6379"),
 		RedisPassword:      os.Getenv("REDIS_PASSWORD"),
 		RedisDB:            envInt("REDIS_DB", 0),
-		KeyPrefix:          env("REDIS_PREFIX", "hc"),
+		KeyPrefix:          env("REDIS_PREFIX", "as"),
 		AssetDir:           env("ASSET_DIR", filepath.Join(dataDir, "assets")),
 		WebDir:             env("WEB_DIR", "web/dist"),
 		AdminUsername:      env("ADMIN_USERNAME", "admin"),
@@ -42,7 +42,7 @@ func main() {
 		logger.Error("create asset directory", "err", err.Error())
 		os.Exit(1)
 	}
-	app, err := hc.Open(cfg)
+	app, err := as.Open(cfg)
 	if err != nil {
 		logger.Error("start", "err", err.Error())
 		os.Exit(1)

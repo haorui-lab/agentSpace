@@ -10,4 +10,4 @@ if [ -z "${ADMIN_PASSWORD:-}" ]; then
 fi
 export REDIS_ADDR="${REDIS_ADDR:-127.0.0.1:6380}"
 export ADMIN_USERNAME="${ADMIN_USERNAME:-admin}"
-exec go run ./cmd/hellocenter
+exec go run ./cmd/agentspace

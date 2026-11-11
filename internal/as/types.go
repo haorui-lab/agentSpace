@@ -1,4 +1,4 @@
-package hc
+package as
 
 // Principal is the authenticated caller. Agent tokens are bound to one space.
 type Principal struct {

@@ -5,12 +5,12 @@ if [ -z "${ADMIN_PASSWORD:-}" ]; then
   echo "请先设置 ADMIN_PASSWORD" >&2
   exit 1
 fi
-export HELLO_CENTER_URL="${HELLO_CENTER_URL:-http://127.0.0.1:8080}"
+export AGENT_SPACE_URL="${AGENT_SPACE_URL:-http://127.0.0.1:8080}"
 export ADMIN_USERNAME="${ADMIN_USERNAME:-admin}"
 export SEED_NAME="${1:-启动失败排查}"
 python3 - <<'PY'
 import json, os, urllib.request, urllib.error
-base = os.environ["HELLO_CENTER_URL"].rstrip("/")
+base = os.environ["AGENT_SPACE_URL"].rstrip("/")
 username = os.environ["ADMIN_USERNAME"]
 password = os.environ["ADMIN_PASSWORD"]
 name = os.environ["SEED_NAME"]
@@ -18,7 +18,7 @@ name = os.environ["SEED_NAME"]
 def request(method, path, payload=None, cookie=""):
     data = None if payload is None else json.dumps(payload).encode()
     req = urllib.request.Request(base + path, data=data, method=method)
-    req.add_header("X-Hello-Center", "1")
+    req.add_header("X-Agent-Space", "1")
     if payload is not None:
         req.add_header("Content-Type", "application/json")
     if cookie:
@@ -31,7 +31,7 @@ def request(method, path, payload=None, cookie=""):
         raise SystemExit(err.read().decode())
     session = cookie
     for item in jar:
-        if item.startswith("hc_session="):
+        if item.startswith("as_session="):
             session = item.split(";", 1)[0]
     return session, json.loads(body)
 
