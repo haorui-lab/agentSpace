@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"encoding/json"
@@ -62,7 +62,7 @@ func (s *Server) routes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /i/{code}/manifest.json", s.handleManifest)
 	mux.HandleFunc("GET /i/{code}/guide.md", s.handleGuideMD)
 	mux.HandleFunc("GET /i/{code}/guide", s.handleGuide)
-	mux.HandleFunc("GET /i/{code}/skills/hello-center/SKILL.md", s.handleSkillMD)
+	mux.HandleFunc("GET /i/{code}/skills/agent-space/SKILL.md", s.handleSkillMD)
 	mux.HandleFunc("GET /i/{code}/skills", s.handleSkills)
 	mux.HandleFunc("GET /i/{code}", s.handleInvitePage)
 
@@ -73,7 +73,7 @@ func (s *Server) routes(mux *http.ServeMux) {
 }
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
-	s.writeJSON(w, http.StatusOK, map[string]string{"status": "ok", "service": "hello-center"})
+	s.writeJSON(w, http.StatusOK, map[string]string{"status": "ok", "service": "agent-space"})
 }
 
 func (s *Server) handleOpenAPI(w http.ResponseWriter, r *http.Request) {
@@ -120,14 +120,14 @@ func (s *Server) handleLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if raw == "" {
-		if c, err := r.Cookie("hc_session"); err == nil {
+		if c, err := r.Cookie("as_session"); err == nil {
 			raw = c.Value
 		}
 	}
 	if raw != "" {
 		s.logout(r.Context(), raw)
 	}
-	http.SetCookie(w, &http.Cookie{Name: "hc_session", Value: "", Path: "/", MaxAge: -1, HttpOnly: true, SameSite: http.SameSiteLaxMode})
+	http.SetCookie(w, &http.Cookie{Name: "as_session", Value: "", Path: "/", MaxAge: -1, HttpOnly: true, SameSite: http.SameSiteLaxMode})
 	s.writeJSON(w, http.StatusOK, map[string]string{"status": "logged_out"})
 }
 
@@ -814,7 +814,7 @@ func (s *Server) baseURL(r *http.Request) string {
 
 func (s *Server) setSessionCookie(w http.ResponseWriter, raw string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "hc_session",
+		Name:     "as_session",
 		Value:    raw,
 		Path:     "/",
 		HttpOnly: true,
@@ -925,7 +925,7 @@ func (s *Server) handleHome(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
-	_, _ = io.WriteString(w, `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>Hello Center</title><body><p>Hello Center API 已启动。构建 <code>web/</code> 后可使用控制台。</p><p><a href="/healthz">健康检查</a></p></body></html>`)
+	_, _ = io.WriteString(w, `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>AgentSpace</title><body><p>AgentSpace API 已启动。构建 <code>web/</code> 后可使用控制台。</p><p><a href="/healthz">健康检查</a></p></body></html>`)
 }
 
 func (s *Server) webReady() bool {

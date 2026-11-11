@@ -1,8 +1,8 @@
 # Redis 4.0 里的数据
 
-Hello Center 不再使用 SQL，没有要执行的表迁移。服务启动时检查 `INFO` 里的 `redis_version`，低于 4.0 会退出；4.0 和更高版本都按下面的键保存 JSON、集合和有序集合。
+AgentSpace 不再使用 SQL，没有要执行的表迁移。服务启动时检查 `INFO` 里的 `redis_version`，低于 4.0 会退出；4.0 和更高版本都按下面的键保存 JSON、集合和有序集合。
 
-前缀来自 `REDIS_PREFIX`，默认是 `hc`。下面用 `{p}` 表示它。访问令牌只保存 SHA-256。邀请记录会保存邀请人可回显的邀请码，查找仍用 SHA-256。文件字节在 `ASSET_DIR`，不进 Redis。
+前缀来自 `REDIS_PREFIX`，默认是 `as`。下面用 `{p}` 表示它。访问令牌只保存 SHA-256。邀请记录会保存邀请人可回显的邀请码，查找仍用 SHA-256。文件字节在 `ASSET_DIR`，不进 Redis。
 
 ```text
 {p}:admin:ready

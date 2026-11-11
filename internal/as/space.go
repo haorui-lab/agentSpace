@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"context"
@@ -407,7 +407,7 @@ func (s *Server) Join(ctx context.Context, code string, in JoinInput, base strin
 		}
 		invitedBy = sp.OwnerID
 	}
-	token := newSecret("hc_live_")
+	token := newSecret("as_live_")
 	agentID, reissued, ev, err := s.st.join(ctx, inv.SpaceID, joinProfile{
 		DisplayName: name, Runtime: runtime, InstanceID: instance, OwnerLabel: owner, Description: description,
 		TokenHash: hashSecret(token), NewAgentID: newID("ag_"), InvitationID: inv.ID, InvitedBy: invitedBy,

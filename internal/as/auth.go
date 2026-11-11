@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"context"
@@ -38,7 +38,7 @@ func (s *Server) login(ctx context.Context, username, password string) (string, 
 		_ = s.audit(ctx, "", "anonymous", "admin.login", "user", user.ID, "denied")
 		return "", Principal{}, unauthorized("invalid username or password")
 	}
-	raw := newSecret("hc_sess_")
+	raw := newSecret("as_sess_")
 	expires := time.Now().UTC().Add(s.cfg.SessionTTL)
 	rec := sessionRecord{ID: newID("ses_"), UserID: user.ID, ExpiresAt: expires.Format("2006-01-02T15:04:05.000Z")}
 	if err := s.st.putSession(ctx, hashSecret(raw), rec, s.cfg.SessionTTL); err != nil {
@@ -60,17 +60,17 @@ func (s *Server) principalFromRequest(r *http.Request) (Principal, string, error
 		}
 		raw := strings.TrimSpace(h[len(prefix):])
 		switch {
-		case strings.HasPrefix(raw, "hc_live_"):
+		case strings.HasPrefix(raw, "as_live_"):
 			p, err := s.principalFromAgentToken(r.Context(), raw)
 			return p, "", err
-		case strings.HasPrefix(raw, "hc_sess_"):
+		case strings.HasPrefix(raw, "as_sess_"):
 			p, err := s.principalFromSession(r.Context(), raw)
 			return p, raw, err
 		default:
 			return Principal{}, "", unauthorized("unknown credentials")
 		}
 	}
-	c, err := r.Cookie("hc_session")
+	c, err := r.Cookie("as_session")
 	if err != nil || c.Value == "" {
 		return Principal{}, "", unauthorized("authentication required")
 	}

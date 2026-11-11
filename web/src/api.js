@@ -9,7 +9,7 @@ export class ApiError extends Error {
 
 export async function api(path, options = {}) {
   const { method = "GET", body, form, redirectOn401 = true } = options;
-  const headers = { "X-Hello-Center": "1" };
+  const headers = { "X-Agent-Space": "1" };
   let payload;
   if (form) {
     payload = form;

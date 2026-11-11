@@ -67,7 +67,7 @@ function Gate({ children }) {
       <div className="app">
         <header className="topbar">
           <div className="topbar-inner">
-            <span className="brand">Hello Center</span>
+            <span className="brand">AgentSpace</span>
           </div>
         </header>
         <main className="page">
@@ -86,7 +86,7 @@ function Shell({ user, children }) {
       <header className="topbar">
         <div className="topbar-inner">
           <Link className="brand" to="/">
-            Hello Center
+            AgentSpace
           </Link>
           <div className="who">
             <span>{user.username}</span>
@@ -111,7 +111,7 @@ function Login() {
   if (session.loading) {
     return (
       <main className="login-page">
-        <p className="brand">Hello Center</p>
+        <p className="brand">AgentSpace</p>
         <p className="status">正在确认登录状态…</p>
       </main>
     );
@@ -138,7 +138,7 @@ function Login() {
 
   return (
     <main className="login-page">
-      <p className="brand">Hello Center</p>
+      <p className="brand">AgentSpace</p>
       <h1>登录</h1>
       <p className="muted">管理员登录</p>
       <form onSubmit={submit}>

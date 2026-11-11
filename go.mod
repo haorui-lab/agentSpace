@@ -1,4 +1,4 @@
-module github.com/haorui/agentSpace
+module github.com/haorui-lab/agentSpace
 
 go 1.25
 

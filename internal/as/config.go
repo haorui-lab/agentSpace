@@ -1,11 +1,11 @@
-package hc
+package as
 
 import (
 	"log/slog"
 	"time"
 )
 
-// Config controls a Hello Center process. Zero values for rates and limits
+// Config controls a AgentSpace process. Zero values for rates and limits
 // are replaced with production defaults. Negative rate limits disable that limiter.
 type Config struct {
 	PublicBaseURL      string
@@ -60,7 +60,7 @@ func (c Config) normalized() Config {
 		c.RedisAddr = "127.0.0.1:6379"
 	}
 	if c.KeyPrefix == "" {
-		c.KeyPrefix = "hc"
+		c.KeyPrefix = "as"
 	}
 	return c
 }

@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"os"

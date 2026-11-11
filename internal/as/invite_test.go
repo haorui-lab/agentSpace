@@ -1,4 +1,4 @@
-package hc
+package as
 
 import (
 	"context"
@@ -19,7 +19,7 @@ import (
 )
 
 func testRedisAddr() string {
-	if v := strings.TrimSpace(os.Getenv("HELLO_CENTER_TEST_REDIS")); v != "" {
+	if v := strings.TrimSpace(os.Getenv("AGENT_SPACE_TEST_REDIS")); v != "" {
 		return v
 	}
 	return "127.0.0.1:6380"
@@ -30,7 +30,7 @@ func testPrefix() string {
 	if _, err := rand.Read(b[:]); err != nil {
 		panic(err)
 	}
-	return "hc:t:" + hex.EncodeToString(b[:])
+	return "as:t:" + hex.EncodeToString(b[:])
 }
 
 type inviteEnv struct {
@@ -47,7 +47,7 @@ func startInviteEnv(t *testing.T) *inviteEnv {
 	prefix := testPrefix()
 	cfg := Config{
 		RedisAddr:          testRedisAddr(),
-		RedisPassword:      os.Getenv("HELLO_CENTER_TEST_REDIS_PASSWORD"),
+		RedisPassword:      os.Getenv("AGENT_SPACE_TEST_REDIS_PASSWORD"),
 		KeyPrefix:          prefix,
 		AssetDir:           filepath.Join(t.TempDir(), "assets"),
 		WebDir:             filepath.Join(t.TempDir(), "no-web"),
@@ -96,7 +96,7 @@ func (e *inviteEnv) json(client *http.Client, method, path string, body any, wan
 	if err != nil {
 		e.t.Fatal(err)
 	}
-	req.Header.Set("X-Hello-Center", "1")
+	req.Header.Set("X-Agent-Space", "1")
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}

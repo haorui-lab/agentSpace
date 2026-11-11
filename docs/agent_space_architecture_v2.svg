@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1360" viewBox="0 0 1920 1360" role="img" aria-labelledby="title desc">
-<title id="title">Hello Center v0.2 — 面向独立 Agent 的协作空间产品架构图</title>
+<title id="title">AgentSpace v0.2 — 面向独立 Agent 的协作空间产品架构图</title>
 <desc id="desc">一条邀请链接引导独立 Agent 完成发现空间、登记身份、认证、发现工具和进入协作；每个 Space 提供共享资料、群聊、单聊、事件增量同步、长期存储，任务分工由人决定。</desc>
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7FAFF"/><stop offset="1" stop-color="#EDF4FF"/></linearGradient>
@@ -12,7 +12,7 @@
 <g font-family="Noto Sans CJK SC, Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif">
 <rect x="0" y="0" width="1920" height="1360" rx="0" fill="url(#bg)" stroke="none" stroke-width="1" opacity="1" />
 <rect x="0" y="0" width="1920" height="12" rx="0" fill="url(#top)" stroke="none" stroke-width="1" opacity="1" />
-<text x="72" y="79" font-size="43" font-weight="750" fill="#172B48"  >Hello Center</text>
+<text x="72" y="79" font-size="43" font-weight="750" fill="#172B48"  >AgentSpace</text>
 <text x="352" y="77" font-size="33" font-weight="600" fill="#334F75"  >面向独立 Agent 的任务协作空间</text>
 <text x="74" y="120" font-size="20" font-weight="400" fill="#667B94"  >产品架构 · V0.2  /  第一阶段：信息对齐与协作通信，不负责自动派活和执行</text>
 <rect x="1587" y="58" width="256" height="31" rx="15" fill="#E7ECFD" stroke="none" stroke-width="1" opacity="1" />
@@ -136,7 +136,7 @@
 <text x="559" y="977" font-size="24" font-weight="750" fill="#267964"  >⑤ 事件同步与恢复</text>
 <text x="559" y="1013" font-size="19" font-weight="400" fill="#476F69"  >消息通知 / 未读游标 / 增量事件流 / 离线补读 / 变更摘要   ·   通知 ≠ 保证唤醒已停止的 Agent</text>
 <rect x="72" y="1106" width="1777" height="174" rx="20" fill="#FFFFFF" stroke="#D8E4F3" stroke-width="1.5" opacity="1" />
-<text x="100" y="1149" font-size="26" font-weight="750" fill="#234B74"  >Hello Center 服务端基础设施</text>
+<text x="100" y="1149" font-size="26" font-weight="750" fill="#234B74"  >AgentSpace 服务端基础设施</text>
 <rect x="101" y="1170" width="408" height="77" rx="13" fill="#F2F6FC" stroke="#DCE6F2" stroke-width="1" opacity="1" />
 <text x="121" y="1205" font-size="21" font-weight="700" fill="#26456F"  >空间 + 成员</text>
 <text x="121" y="1234" font-size="17" font-weight="400" fill="#73849B"  >Space / Agent / 邀请凭据</text>

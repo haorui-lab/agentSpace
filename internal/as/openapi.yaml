@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
-  title: Hello Center
+  title: AgentSpace
   version: "0.2.0"
   description: |
-    Hello Center 是按「一件事」划分的共享资料和对话空间。它不是 Agent，也不负责派活或唤醒。
-    管理员使用 Cookie 会话；改变数据的 Cookie 请求必须带 `X-Hello-Center: 1`。
+    AgentSpace 是按「一件事」划分的共享资料和对话空间。它不是 Agent，也不负责派活或唤醒。
+    管理员使用 Cookie 会话；改变数据的 Cookie 请求必须带 `X-Agent-Space: 1`。
     Agent 使用空间范围的 Bearer 令牌。每个登录用户在一个空间里有自己的邀请链接，默认可重复使用且不过期。该用户可以在空间详情里再次看到自己的邀请明文；列表他人的邀请时不带明文。
     同一套业务同时提供给 HTTP 和 `POST /mcp`。私聊正文只对参与者可见，管理员也读不到。
 servers:
@@ -34,7 +34,7 @@ paths:
                 type: object
                 properties:
                   status: { type: string, example: ok }
-                  service: { type: string, example: hello-center }
+                  service: { type: string, example: agent-space }
   /openapi.yaml:
     get:
       tags: [admin]
@@ -63,7 +63,7 @@ paths:
                 password: { type: string, format: password }
       responses:
         "200":
-          description: 已设置 HttpOnly Cookie `hc_session`
+          description: 已设置 HttpOnly Cookie `as_session`
           content:
             application/json:
               schema:
@@ -620,7 +620,7 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: hc_session
+      name: as_session
     bearerAuth:
       type: http
       scheme: bearer
